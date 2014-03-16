@@ -1,7 +1,17 @@
 import playlist
 import requests
 import json
+from mock import MagicMock
 
+
+def get_stub(*args, **kwargs):
+    response = requests.get.return_value
+    with open('radio983.html', 'r') as f:
+        response.text = f.read()
+        response.status_code = 200
+        return response
+
+requests.get = MagicMock(side_effect=get_stub)
 
 app = playlist.app.test_client()
 
