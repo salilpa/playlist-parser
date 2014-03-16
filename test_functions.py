@@ -1,4 +1,4 @@
-from .functions import *
+from functions import *
 
 
 def test_video_text_from_url():
