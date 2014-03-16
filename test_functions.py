@@ -1,4 +1,4 @@
-from functions import *
+import functions
 
 
 def test_video_text_from_url():
@@ -33,10 +33,10 @@ def test_video_text_from_url():
             ]
         }
     }
-    keywords = video_text_from_url(payload["url"], payload["settings"], payload["soup_path_for_list"],
+    keywords = functions.video_text_from_url(payload["url"], payload["settings"], payload["soup_path_for_list"],
                                    payload["soup_path_for_keyword"])
     assert len(keywords) == 20
     payload["soup_path_for_list"]["attr"]["class"] = "blah"
-    keywords = video_text_from_url(payload["url"], payload["settings"], payload["soup_path_for_list"],
+    keywords = functions.video_text_from_url(payload["url"], payload["settings"], payload["soup_path_for_list"],
                                    payload["soup_path_for_keyword"])
     assert len(keywords) == 0
