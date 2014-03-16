@@ -1,4 +1,6 @@
-from flask import Flask
+from flask import Flask, request
+from functions import video_text_from_url
+import json
 
 app = Flask(__name__)
 
@@ -6,4 +8,5 @@ app = Flask(__name__)
 #returns a page with links to all websites
 @app.route('/', methods=["POST"])
 def index():
-    return 'Hello World!'
+    station = json.loads(request.form["data"])
+    return ",".join(video_text_from_url(station["url"], station["settings"], station["soup_path_for_list"], station["soup_path_for_keyword"]))

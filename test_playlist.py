@@ -1,7 +1,12 @@
-from functions import *
+import playlist
+import requests
+import json
 
 
-def test_video_text_from_url():
+app = playlist.app.test_client()
+
+
+def test_website():
     payload = {
         "url": 'http://www.radiomirchi.com/thiruvananthapuram/countdown/malayalam-top-20',
         "settings": {
@@ -33,10 +38,6 @@ def test_video_text_from_url():
             ]
         }
     }
-    keywords = video_text_from_url(payload["url"], payload["settings"], payload["soup_path_for_list"],
-                                   payload["soup_path_for_keyword"])
-    assert len(keywords) == 20
-    payload["soup_path_for_list"]["attr"]["class"] = "blah"
-    keywords = video_text_from_url(payload["url"], payload["settings"], payload["soup_path_for_list"],
-                                   payload["soup_path_for_keyword"])
-    assert len(keywords) == 0
+    rv = app.post('/', data=dict(data=json.dumps(payload)))
+    expected_data = "MARIVIL  DRISHYAM,KAATTU MOOLIYO OM SHANTHI OSANA ,OLANJAALI KURUVIL 1983,EERAN KAATTIN  SALALA MOBILES,MANDARAME OM SHANTHI OSANA ,KANNADI VATHIL LONDON BRIDGE,OMANA POOVE ORU INDIAN PRANAY...,RASOOL ALLAH SALALA MOBILES,PUNCHIRI THANCHUM BYCYCLE THIEVES,LA LA LASA SALALA MOBILES,AASHICHAVAN PUNYALAN AGARBATTIS,NENJILE NENJILE 1983,THAMARAPOONKAVANAT... BALYAKALA SAKHI,CHEMMANA CHELORUKKI MANNAR MATHAI SPE...,THALAVATTOM 1983,THIRIYAANE MANNAR MATHAI SPE...,MADHUMATHI GEETHANJALI,CHINNI CHINNI LONDON BRIDGE,THEERATHE NEELUNNE THIRA,OTTEKKU PAADUNNA NADAN"
+    assert rv.data == expected_data
