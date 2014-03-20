@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 #returns a page with links to all websites
-@app.route('/', methods=["POST", "GET"])
+@app.route('/', methods=["POST", "GET", "OPTIONS"])
 @crossdomain(origin='*')
 def index():
     if request.method == 'POST':
