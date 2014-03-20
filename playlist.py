@@ -11,7 +11,7 @@ app = Flask(__name__)
 @crossdomain(origin='*')
 def index():
     if request.method == 'POST':
-        station = json.loads(request.form["data"])
-        return ",".join(video_text_from_url(station["url"], station["settings"], station["soup_path_for_list"], station["soup_path_for_keyword"]))
+        station = json.loads(request.data)
+        return "|".join(video_text_from_url(station["url"], station["settings"], station["soup_path_for_list"], station["soup_path_for_keyword"]))
     else:
         return "All is well"
