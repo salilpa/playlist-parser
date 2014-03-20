@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 #returns a page with links to all websites
 @app.route('/', methods=["POST", "GET"])
-@crossdomain(origin='*', methods=["POST", "GET"])
+@crossdomain(origin='*')
 def index():
     if request.method == 'POST':
         station = json.loads(request.form["data"])
