@@ -18,6 +18,7 @@ app = playlist.app.test_client()
 
 def test_website():
     payload = {
+        "name": "radioMirchiTvmMalayalamTop20",
         "url": 'http://www.radiomirchi.com/thiruvananthapuram/countdown/malayalam-top-20',
         "settings": {
             "parser": "html5lib",
@@ -46,8 +47,20 @@ def test_website():
                     }
                 },
             ]
+        },
+        "meta": {
+            "country": "india",
+            "language": "malayalam",
         }
     }
-    rv = app.post('/', data=json.dumps(payload))
+    rv = app.post('/pageToKeywords/', data=dict(data=json.dumps(payload)))
     expected_data = ['MARIVIL  DRISHYAM', 'KAATTU MOOLIYO OM SHANTHI OSANA ', 'OLANJAALI KURUVIL 1983', 'EERAN KAATTIN  SALALA MOBILES', 'MANDARAME OM SHANTHI OSANA ', 'KANNADI VATHIL LONDON BRIDGE', 'OMANA POOVE ORU INDIAN PRANAY', 'RASOOL ALLAH SALALA MOBILES', 'PUNCHIRI THANCHUM BYCYCLE THIEVES', 'LA LA LASA SALALA MOBILES', 'AASHICHAVAN PUNYALAN AGARBATTIS', 'NENJILE NENJILE 1983', 'THAMARAPOONKAVANAT BALYAKALA SAKHI', 'CHEMMANA CHELORUKKI MANNAR MATHAI SPE', 'THALAVATTOM 1983', 'THIRIYAANE MANNAR MATHAI SPE', 'MADHUMATHI GEETHANJALI', 'CHINNI CHINNI LONDON BRIDGE', 'THEERATHE NEELUNNE THIRA', 'OTTEKKU PAADUNNA NADAN']
     assert rv.data.split("|") == expected_data
+    
+    rv = app.get('/pageToKeywords/')
+    expected_get_data = "All is well"
+    assert rv.data == expected_get_data
+
+    rv = app.get('/station/radioMirchiTvmMalayalamTop20')
+    expected_station_data = "Incomplete function"
+    assert rv.data == expected_station_data
