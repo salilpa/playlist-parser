@@ -23,3 +23,7 @@ def station_details(name):
     #get the radio station from the object
     #get keywords from the object parameter
     return "Incomplete function"
+
+@app.route('/')
+def index():
+    return "dummy index function"

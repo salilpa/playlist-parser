@@ -64,3 +64,7 @@ def test_website():
     rv = app.get('/station/radioMirchiTvmMalayalamTop20')
     expected_station_data = "Incomplete function"
     assert rv.data == expected_station_data
+
+    rv = app.get('/')
+    expected_station_data = "dummy index function"
+    assert rv.data == expected_station_data
