@@ -32,4 +32,5 @@ def get_video_from_keyword(keyword):
         video["thumbnail"] = search_result["snippet"]["thumbnails"]["medium"]["url"]
         video["title"] = search_result["snippet"]["title"]
         video["description"] = search_result["snippet"]["description"]
+        video["keyword"] = keyword
     return video

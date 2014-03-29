@@ -21,9 +21,16 @@ def page_to_keywords():
 @app.route('/station/<string:name>')
 def station_details(name):
     station = db.stations.find_one({"name": name})
+    if station:
+        keywords = video_text_from_url(station["url"], station["settings"], station["soup_path_for_list"], station["soup_path_for_keyword"])
+        videos = []
+        for keyword in keywords:
+            videos.append(get_video_from_keyword(keyword))
+        return "total number of videos is " + str(len(videos))
     #get the radio station from the object
     #get keywords from the object parameter
-    return "Incomplete function"
+    else:
+        return "Incomplete function"
 
 @app.route('/<string:meta_key>/<string:meta_val>/page/<int:page_number>')
 def get_meta_value(meta_key, meta_val, page_number):
