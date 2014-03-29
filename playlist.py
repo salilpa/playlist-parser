@@ -29,7 +29,19 @@ def station_details(name):
 def get_meta_value(meta_key, meta_val, page_number):
     stations = db.stations.find({"meta." + meta_key: meta_val})
     count = stations.count()
-    if count > 0:
+    if count > (page_number - 1)*PER_PAGE:
+        #should return list of objects divided by page
+        stations_to_be_displayed = stations[(page_number-1)*PER_PAGE:page_number*PER_PAGE]
+        pagination = Pagination(page_number, PER_PAGE, count)
+        return "More than zero documents"
+    else:
+        return "None found"
+
+@app.route('/<string:meta_key>/page/<int:page_number>')
+def get_meta_key(meta_key, page_number):
+    stations = db.stations.distinct("meta." + meta_key)
+    count = len(stations)
+    if count > (page_number - 1)*PER_PAGE:
         #should return list of objects divided by page
         stations_to_be_displayed = stations[(page_number-1)*PER_PAGE:page_number*PER_PAGE]
         pagination = Pagination(page_number, PER_PAGE, count)
@@ -39,4 +51,5 @@ def get_meta_value(meta_key, meta_val, page_number):
 
 @app.route('/')
 def index():
+    #find all meta keys and give urls to it
     return "dummy index function"
