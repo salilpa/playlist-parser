@@ -13,6 +13,7 @@ def get_stub(*args, **kwargs):
         response.status_code = 200
         return response
 
+
 requests.get = MagicMock(side_effect=get_stub)
 
 test_app = playlist.app.test_client()
@@ -56,9 +57,16 @@ def test_website():
         }
     }
     rv = test_app.post('/pageToKeywords/', data=json.dumps(payload))
-    expected_data = ['MARIVIL  DRISHYAM', 'KAATTU MOOLIYO OM SHANTHI OSANA ', 'OLANJAALI KURUVIL 1983', 'EERAN KAATTIN  SALALA MOBILES', 'MANDARAME OM SHANTHI OSANA ', 'KANNADI VATHIL LONDON BRIDGE', 'OMANA POOVE ORU INDIAN PRANAY', 'RASOOL ALLAH SALALA MOBILES', 'PUNCHIRI THANCHUM BYCYCLE THIEVES', 'LA LA LASA SALALA MOBILES', 'AASHICHAVAN PUNYALAN AGARBATTIS', 'NENJILE NENJILE 1983', 'THAMARAPOONKAVANAT BALYAKALA SAKHI', 'CHEMMANA CHELORUKKI MANNAR MATHAI SPE', 'THALAVATTOM 1983', 'THIRIYAANE MANNAR MATHAI SPE', 'MADHUMATHI GEETHANJALI', 'CHINNI CHINNI LONDON BRIDGE', 'THEERATHE NEELUNNE THIRA', 'OTTEKKU PAADUNNA NADAN']
+    expected_data = ['MARIVIL  DRISHYAM', 'KAATTU MOOLIYO OM SHANTHI OSANA ', 'OLANJAALI KURUVIL 1983',
+                     'EERAN KAATTIN  SALALA MOBILES', 'MANDARAME OM SHANTHI OSANA ', 'KANNADI VATHIL LONDON BRIDGE',
+                     'OMANA POOVE ORU INDIAN PRANAY', 'RASOOL ALLAH SALALA MOBILES',
+                     'PUNCHIRI THANCHUM BYCYCLE THIEVES', 'LA LA LASA SALALA MOBILES',
+                     'AASHICHAVAN PUNYALAN AGARBATTIS', 'NENJILE NENJILE 1983', 'THAMARAPOONKAVANAT BALYAKALA SAKHI',
+                     'CHEMMANA CHELORUKKI MANNAR MATHAI SPE', 'THALAVATTOM 1983', 'THIRIYAANE MANNAR MATHAI SPE',
+                     'MADHUMATHI GEETHANJALI', 'CHINNI CHINNI LONDON BRIDGE', 'THEERATHE NEELUNNE THIRA',
+                     'OTTEKKU PAADUNNA NADAN']
     assert rv.data.split("|") == expected_data
-    
+
     rv = test_app.get('/pageToKeywords/')
     expected_get_data = "All is well"
     assert rv.data == expected_get_data
@@ -81,5 +89,5 @@ def test_generate_meta_key_urls():
         attr_result = flask_functions.generate_meta_key_urls(db, "country")
     assert len(attr_result) > 0
     for indv_url in attr_result:
-        rv=test_app.get(indv_url)
+        rv = test_app.get(indv_url)
         assert rv.status_code == 200
