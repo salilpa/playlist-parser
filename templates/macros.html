@@ -1,0 +1,44 @@
+{% macro create_url_block(url_blocks) -%}
+    {% for url_block in url_blocks %}
+        <h2><a href="{{ url_block.url }}">{{ url_block.name }}</a></h2>
+        <div class="row">
+            {% for sub_url in url_block.sub_urls %}
+                {{ thumbnail_generation(sub_url) }}
+            {% endfor %}
+        </div>
+    {% endfor %}
+{%- endmacro %}
+
+{% macro thumbnail_generation(sub_url) %}
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3>{{ sub_url.name }}</h3>
+                <p></p>
+                <p><a href="{{ sub_url.url }}" class="btn btn-primary" role="button">See all music charts of {{ sub_url.name }}</a>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_pagination(pagination) %}
+    <ul class="pagination">
+        {% if pagination.has_prev %}
+            <li><a href="{{ url_for_other_page(pagination.page - 1)}}">&laquo; prev</a></li>
+        {% endif %}
+        {%- for page in pagination.iter_pages() %}
+            {% if page %}
+                {% if page != pagination.page %}
+                    <li><a href="{{ url_for_other_page(page) }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="active"><a href="{{ url_for_other_page(page) }}">{{ page }}</a></li>
+                {% endif %}
+            {% else %}
+                <li class="disabled"><a href="#">...</a></li>
+            {% endif %}
+        {%- endfor %}
+        {% if pagination.has_next %}
+            <li><a href="{{ url_for_other_page(pagination.page + 1)}}">next &raquo;</a></li>
+        {% endif %}
+    </ul>
+{% endmacro %}
