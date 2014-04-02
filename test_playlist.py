@@ -78,7 +78,14 @@ def test_website():
 
 def test_generate_meta_key_urls():
     with playlist.app.test_request_context():
-        result = flask_functions.generate_meta_key_urls(db, "country")
-    for indv_url in result:
+        attr_result = flask_functions.generate_meta_key_urls(db, "country")
+        attr_key_result = flask_functions.generate_meta_key_urls(db, "country", "india", 4)
+    assert len(attr_result) > 0
+    for indv_url in attr_result:
+        rv=test_app.get(indv_url)
+        assert rv.status_code == 200
+
+    assert len(attr_key_result) > 0
+    for indv_url in attr_key_result:
         rv=test_app.get(indv_url)
         assert rv.status_code == 200
