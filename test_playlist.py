@@ -80,8 +80,8 @@ def test_website():
     assert rv.data == expected_station_data
 
     rv = test_app.get('/')
-    expected_station_data = "dummy index function"
-    assert rv.data == expected_station_data
+    expected_station_data = "globalcharts.tv"
+    assert expected_station_data in rv.data
 
 
 def test_generate_meta_key_urls():
@@ -89,5 +89,5 @@ def test_generate_meta_key_urls():
         attr_result = flask_functions.generate_meta_key_urls(db, "country")
     assert len(attr_result) > 0
     for indv_url in attr_result:
-        rv = test_app.get(indv_url)
+        rv = test_app.get(indv_url["url"])
         assert rv.status_code == 200
