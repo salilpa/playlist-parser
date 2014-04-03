@@ -63,7 +63,7 @@ def get_meta_key(meta_key, page_number):
             "urls": meta_values[(page_number - 1) * PER_PAGE:page_number * PER_PAGE]
         }
         pagination = Pagination(page_number, PER_PAGE, count)
-        return render_template("station_list.html", pagination=pagination, meta_to_be_displayed=meta_to_be_displayed)
+        return render_template("meta_list.html", pagination=pagination, meta_to_be_displayed=meta_to_be_displayed)
     else:
         return "None found"
 

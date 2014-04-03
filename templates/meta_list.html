@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Youtube playlist creator{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if pagination %}
+            {{ macros.render_pagination(pagination) }}
+        {% endif %}
+        <h2> {{ meta_to_be_displayed.name }} </h2>
+        {% for url in meta_to_be_displayed.urls %}
+            {{ macros.thumbnail_generation(url) }}
+        {% endfor %}
+    </div>
+{% endblock %}
