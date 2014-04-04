@@ -91,3 +91,10 @@ def test_generate_meta_key_urls():
     for indv_url in attr_result:
         rv = test_app.get(indv_url["url"])
         assert rv.status_code == 200
+
+def test_create_url_objects_from_stations():
+    station = db.stations.find()[:4]
+    length_of_station = station.count()
+    with playlist.app.test_request_context():
+        result = flask_functions.create_url_objects_from_stations(station)
+    assert len(result) == length_of_station

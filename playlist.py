@@ -45,7 +45,8 @@ def get_meta_value(meta_key, meta_val, page_number):
     count = stations.count()
     if count > (page_number - 1) * PER_PAGE:
         #should return list of objects divided by page
-        stations_to_be_displayed = stations[(page_number - 1) * PER_PAGE:page_number * PER_PAGE]
+        stations_to_be_displayed = stations[(page_number-1)*PER_PAGE:page_number*PER_PAGE]
+        station_urls = create_url_objects_from_stations(stations_to_be_displayed)
         pagination = Pagination(page_number, PER_PAGE, count)
         return "More than zero documents"
     else:

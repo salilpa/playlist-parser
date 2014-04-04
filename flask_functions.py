@@ -22,3 +22,22 @@ def url_for_other_page(page):
     args = request.view_args.copy()
     args['page_number'] = page
     return url_for(request.endpoint, **args)
+
+
+def create_url_objects_from_stations(stations):
+    url_objects = []
+    for station in stations:
+        url_object ={}
+        url_object["name"] = station["display_name"]
+        url_object["url"] = url_for(".station_details", name=station["name"])
+        url_object["parent_url"] = station["url"]
+        url_object["meta"] = []
+        for key, value in station["meta"].iteritems():
+            url_for_key = url_for(".get_meta_key", meta_key = key, page_number =1)
+            url_for_value = url_for(".get_meta_value", meta_key = key, meta_val = value, page_number=1)
+            url_object["meta"].append({
+                "key_url": url_for_key,
+                "val_url": url_for_value
+            })
+        url_objects.append(url_object)
+    return url_objects
