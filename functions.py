@@ -24,7 +24,9 @@ def video_text_from_url(url, settings, soup_path_for_list, soup_path_for_keyword
 
 
 def get_video_from_keyword(keyword):
-    video = {}
+    video = {
+        "keyword":keyword
+    }
     youtube = build("youtube", "v3", developerKey=DEVELOPER_KEY)
     search_response = youtube.search().list(q=keyword, part="id,snippet", maxResults="1", type="video").execute()
     for search_result in search_response.get("items", []):
@@ -32,5 +34,4 @@ def get_video_from_keyword(keyword):
         video["thumbnail"] = search_result["snippet"]["thumbnails"]["medium"]["url"]
         video["title"] = search_result["snippet"]["title"]
         video["description"] = search_result["snippet"]["description"]
-        video["keyword"] = keyword
     return video

@@ -37,7 +37,9 @@ def create_url_objects_from_stations(stations):
             url_for_value = url_for(".get_meta_value", meta_key = key, meta_val = value, page_number=1)
             url_object["meta"].append({
                 "key_url": url_for_key,
-                "val_url": url_for_value
+                "key_name": key,
+                "val_url": url_for_value,
+                "val_name": value
             })
         url_objects.append(url_object)
     return url_objects

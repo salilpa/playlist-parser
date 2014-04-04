@@ -15,7 +15,35 @@
             <div class="caption">
                 <h3>{{ sub_url.name }}</h3>
                 <p></p>
-                <p><a href="{{ sub_url.url }}" class="btn btn-primary" role="button">See all music charts of {{ sub_url.name }}</a>
+                <p><a href="{{ sub_url.url }}" class="btn btn-primary" role="button">See all music charts of {{ sub_url.name }}</a></p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro thumbnail_for_video(video) %}
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3>{{ video.title }}</h3>
+                <p></p>
+                <img src="{{ video.thumbnail }}"/>
+                <p>{{ video.description }}</p>
+                <p>{{ video.keyword }}</p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro thumbnail_for_stations(station) %}
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <div class="caption">
+                <h3><a href="{{ station.url }}">{{ station.name }}</a></h3>
+                <p></p>
+                {% for meta_url in station.meta %}
+                    <p><a href="{{ meta_url.key_url }}">{{ meta_url.key_name }}</a> : <a href="{{ meta_url.val_url }}">{{ meta_url.val_name }}</a></p>
+                {% endfor %}
             </div>
         </div>
     </div>

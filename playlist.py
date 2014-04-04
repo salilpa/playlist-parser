@@ -32,7 +32,7 @@ def station_details(name):
         videos = []
         for keyword in keywords:
             videos.append(get_video_from_keyword(keyword))
-        return "total number of videos is " + str(len(videos))
+        return render_template("station.html", videos=videos)
     #get the radio station from the object
     #get keywords from the object parameter
     else:
@@ -48,7 +48,7 @@ def get_meta_value(meta_key, meta_val, page_number):
         stations_to_be_displayed = stations[(page_number-1)*PER_PAGE:page_number*PER_PAGE]
         station_urls = create_url_objects_from_stations(stations_to_be_displayed)
         pagination = Pagination(page_number, PER_PAGE, count)
-        return "More than zero documents"
+        return render_template("station_list.html", pagination=pagination, stations=station_urls)
     else:
         return "None found"
 

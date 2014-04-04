@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Youtube playlist creator{% endblock %}
+
+{% block content %}
+    <div class="container" xmlns="http://www.w3.org/1999/html">
+
+            {% for video in videos %}
+                {% if loop.index0 % 3 == 0 %}
+                    <div class="row">
+                {% endif %}
+                {{ macros.thumbnail_for_video(video) }}
+                {% if loop.index0 % 3 == 2 or loop.last %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
