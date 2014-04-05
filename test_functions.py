@@ -45,3 +45,9 @@ def test_video_text_from_url():
 def test_get_video_from_keyword():
     assert "videoId" in get_video_from_keyword("dil se")
     assert "videoId" not in get_video_from_keyword("hvjhdvhbdhfbvjhdfbvd")
+    assert "videoId" in get_video_from_keyword("poovin maarile")
+
+
+def test_get_suggested_keyword():
+    assert "" == get_suggested_keyword("fjghkkdhfgjdk")
+    assert "" != get_suggested_keyword("poovin maarile")
