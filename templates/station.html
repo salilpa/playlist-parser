@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Youtube playlist creator{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/player.js"></script>
+{% endblock %}
 
 {% block content %}
     <div class="container" xmlns="http://www.w3.org/1999/html">
-
+        <div id="player"></div>
             {% for video in videos %}
                 {% if loop.index0 % 3 == 0 %}
                     <div class="row">

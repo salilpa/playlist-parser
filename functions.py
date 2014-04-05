@@ -28,7 +28,7 @@ def get_video_from_keyword(keyword):
         "keyword": keyword
     }
     youtube = build("youtube", "v3", developerKey=DEVELOPER_KEY)
-    search_response = youtube.search().list(q=keyword, part="id,snippet", maxResults="1", type="video").execute()
+    search_response = youtube.search().list(q=keyword, part="id,snippet", maxResults="1", type="video", videoEmbeddable="true").execute()
     for search_result in search_response.get("items", []):
         video["videoId"] = search_result["id"]["videoId"]
         video["thumbnail"] = search_result["snippet"]["thumbnails"]["medium"]["url"]

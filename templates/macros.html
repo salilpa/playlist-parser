@@ -23,11 +23,12 @@
 
 {% macro thumbnail_for_video(video) %}
     <div class="col-sm-6 col-md-4">
+        <div class="hidden videoId">{{ video.videoId }}</div>
         <div class="thumbnail">
             <div class="caption">
                 <h3>{{ video.title }}</h3>
                 <p></p>
-                <img src="{{ video.thumbnail }}"/>
+                <a onclick="player.loadVideoById('{{ video.videoId }}')"><img src="{{ video.thumbnail }}"/></a>
                 <p>{{ video.description }}</p>
                 <p>{{ video.keyword }}</p>
             </div>
