@@ -40,3 +40,13 @@ def test_video_text_from_url():
     keywords = video_text_from_url(payload["url"], payload["settings"], payload["soup_path_for_list"],
                                    payload["soup_path_for_keyword"])
     assert len(keywords) == 0
+
+
+def test_get_video_from_keyword():
+    assert "videoId" in get_video_from_keyword("dil se")
+    assert "videoId" in get_video_from_keyword("poovin maarile")
+
+
+def test_get_suggested_keyword():
+    assert "" == get_suggested_keyword("fjghkkdhfgjdk")
+    assert "" != get_suggested_keyword("poovin maarile")

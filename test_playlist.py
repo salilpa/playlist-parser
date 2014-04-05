@@ -1,7 +1,9 @@
 import playlist
 import requests
 import json
+import flask_functions
 from mock import MagicMock
+from settings import db
 
 
 def get_stub(*args, **kwargs):
@@ -11,9 +13,10 @@ def get_stub(*args, **kwargs):
         response.status_code = 200
         return response
 
+
 requests.get = MagicMock(side_effect=get_stub)
 
-app = playlist.app.test_client()
+test_app = playlist.app.test_client()
 
 
 def test_website():
@@ -53,18 +56,45 @@ def test_website():
             "language": "malayalam",
         }
     }
-    rv = app.post('/pageToKeywords/', data=json.dumps(payload))
-    expected_data = ['MARIVIL  DRISHYAM', 'KAATTU MOOLIYO OM SHANTHI OSANA ', 'OLANJAALI KURUVIL 1983', 'EERAN KAATTIN  SALALA MOBILES', 'MANDARAME OM SHANTHI OSANA ', 'KANNADI VATHIL LONDON BRIDGE', 'OMANA POOVE ORU INDIAN PRANAY', 'RASOOL ALLAH SALALA MOBILES', 'PUNCHIRI THANCHUM BYCYCLE THIEVES', 'LA LA LASA SALALA MOBILES', 'AASHICHAVAN PUNYALAN AGARBATTIS', 'NENJILE NENJILE 1983', 'THAMARAPOONKAVANAT BALYAKALA SAKHI', 'CHEMMANA CHELORUKKI MANNAR MATHAI SPE', 'THALAVATTOM 1983', 'THIRIYAANE MANNAR MATHAI SPE', 'MADHUMATHI GEETHANJALI', 'CHINNI CHINNI LONDON BRIDGE', 'THEERATHE NEELUNNE THIRA', 'OTTEKKU PAADUNNA NADAN']
+    rv = test_app.post('/pageToKeywords/', data=json.dumps(payload))
+    expected_data = ['MARIVIL  DRISHYAM', 'KAATTU MOOLIYO OM SHANTHI OSANA ', 'OLANJAALI KURUVIL 1983',
+                     'EERAN KAATTIN  SALALA MOBILES', 'MANDARAME OM SHANTHI OSANA ', 'KANNADI VATHIL LONDON BRIDGE',
+                     'OMANA POOVE ORU INDIAN PRANAY', 'RASOOL ALLAH SALALA MOBILES',
+                     'PUNCHIRI THANCHUM BYCYCLE THIEVES', 'LA LA LASA SALALA MOBILES',
+                     'AASHICHAVAN PUNYALAN AGARBATTIS', 'NENJILE NENJILE 1983', 'THAMARAPOONKAVANAT BALYAKALA SAKHI',
+                     'CHEMMANA CHELORUKKI MANNAR MATHAI SPE', 'THALAVATTOM 1983', 'THIRIYAANE MANNAR MATHAI SPE',
+                     'MADHUMATHI GEETHANJALI', 'CHINNI CHINNI LONDON BRIDGE', 'THEERATHE NEELUNNE THIRA',
+                     'OTTEKKU PAADUNNA NADAN']
     assert rv.data.split("|") == expected_data
-    
-    rv = app.get('/pageToKeywords/')
+
+    rv = test_app.get('/pageToKeywords/')
     expected_get_data = "All is well"
     assert rv.data == expected_get_data
 
-    rv = app.get('/station/radioMirchiTvmMalayalamTop20')
+    rv = test_app.get('/station/radioMirchiTvmMalayalamTop20')
+    expected_station_data = "globalcharts.tv"
+    assert expected_station_data in rv.data
+
+    rv = test_app.get('/station/wrongName')
     expected_station_data = "Incomplete function"
     assert rv.data == expected_station_data
 
-    rv = app.get('/')
-    expected_station_data = "dummy index function"
-    assert rv.data == expected_station_data
+    rv = test_app.get('/')
+    expected_station_data = "globalcharts.tv"
+    assert expected_station_data in rv.data
+
+
+def test_generate_meta_key_urls():
+    with playlist.app.test_request_context():
+        attr_result = flask_functions.generate_meta_key_urls(db, "country")
+    assert len(attr_result) > 0
+    for indv_url in attr_result:
+        rv = test_app.get(indv_url["url"])
+        assert rv.status_code == 200
+
+def test_create_url_objects_from_stations():
+    station = db.stations.find()[:4]
+    length_of_station = station.count()
+    with playlist.app.test_request_context():
+        result = flask_functions.create_url_objects_from_stations(station)
+    assert len(result) == length_of_station

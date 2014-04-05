@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Youtube playlist creator{% endblock %}
+
+{% block content %}
+    <div class="container" xmlns="http://www.w3.org/1999/html">
+        {% if pagination %}
+            {{ macros.render_pagination(pagination) }}
+        {% endif %}
+        <div class="row">
+            {% for station in stations %}
+                    {{ macros.thumbnail_for_stations(station) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
