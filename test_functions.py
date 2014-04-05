@@ -44,7 +44,6 @@ def test_video_text_from_url():
 
 def test_get_video_from_keyword():
     assert "videoId" in get_video_from_keyword("dil se")
-    assert "videoId" not in get_video_from_keyword("hvjhdvhbdhfbvjhdfbvd")
     assert "videoId" in get_video_from_keyword("poovin maarile")
 
 

@@ -72,8 +72,8 @@ def test_website():
     assert rv.data == expected_get_data
 
     rv = test_app.get('/station/radioMirchiTvmMalayalamTop20')
-    expected_station_data = "total number of videos is 20"
-    assert rv.data == expected_station_data
+    expected_station_data = "globalcharts.tv"
+    assert expected_station_data in rv.data
 
     rv = test_app.get('/station/wrongName')
     expected_station_data = "Incomplete function"
