@@ -1,5 +1,10 @@
-from settings import PER_PAGE
-from flask import url_for, request
+from flask import request
+from flask import url_for as flask_url_for
+
+
+def url_for(endpoint, **kwargs):
+    kwargs.setdefault('_external', True)
+    return flask_url_for(endpoint, **kwargs)
 
 
 def generate_meta_key_urls(db, attr, size=4):

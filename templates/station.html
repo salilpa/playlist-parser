@@ -2,7 +2,7 @@
 {% block title %}Youtube playlist creator{% endblock %}
 {% block scripts %}
     {{ super() }}
-    <script src="../static/player.js"></script>
+    <script src="{{ url_for('static', filename='js/player.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
                 {% if loop.index0 % 3 == 0 %}
                     <div class="row">
                 {% endif %}
-                {{ macros.thumbnail_for_video(video) }}
+                {{ macros.thumbnail_for_video(video, loop.index0) }}
                 {% if loop.index0 % 3 == 2 or loop.last %}
                     </div>
                 {% endif %}
