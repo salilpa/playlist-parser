@@ -15,19 +15,20 @@ function onYouTubeIframeAPIReady() {
         height: '390',
         width: '640',
         //find the first video id
-        videoId: videoIds[0],
+        videoId: videoIds[getHashFromUrl()],
         events: {
-            'onReady': onPlayerReady,
+            //'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
         }
     });
 }
 
 // 4. The API will call this function when the video player is ready.
+/*
 function onPlayerReady(event) {
     event.target.playVideo();
 }
-
+*/
 // 5. The API calls this function when the player's state changes.
 //    The function indicates that when playing a video (state=1),
 //    the player should play for six seconds and then stop.
@@ -45,10 +46,10 @@ function stopVideo() {
 */
 function onPlayerStateChange(event) {
             if(event.data === 0) {
-                currentItem = player.getVideoData().video_id
-                nextIndex = videoIds.indexOf(currentItem) + 1
+                currentItem = player.getVideoData().video_id;
+                nextIndex = videoIds.indexOf(currentItem) + 1;
                 if (nextIndex+1 != 0 && typeof (videoIds[nextIndex]) != "undefined" ){
-                    player.loadVideoById(videoIds[nextIndex]);
+                    openNewUrl(nextIndex);
                 }
             }
         }
@@ -56,9 +57,24 @@ function onPlayerStateChange(event) {
 function getVideoIds() {
     var videoIds = [];
     videos = $(".hidden.videoId");
-    videosLength = videos.length
+    videosLength = videos.length;
     for (var i=0; i<videosLength; i++){
-        videoIds.push(videos[i].innerText)
+        videoIds.push(videos[i].innerText);
     }
-    return videoIds
+    return videoIds;
+}
+
+function getHashFromUrl(){
+    if(window.location.hash) {
+      return window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+      // hash found
+    } else {
+      return 0
+    }
+}
+
+function openNewUrl(videoNumber){
+    var a = window.location.protocol + "//" + window.location.hostname + (window.location.port?":"+window.location.port:"") + window.location.pathname + "#" + videoNumber;
+    window.location.href = a;
+    window.location.reload();
 }

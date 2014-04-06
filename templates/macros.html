@@ -21,14 +21,14 @@
     </div>
 {% endmacro %}
 
-{% macro thumbnail_for_video(video) %}
+{% macro thumbnail_for_video(video, loop_number) %}
     <div class="col-sm-6 col-md-4">
         <div class="hidden videoId">{{ video.videoId }}</div>
         <div class="thumbnail">
             <div class="caption">
                 <h3>{{ video.title }}</h3>
                 <p></p>
-                <a onclick="player.loadVideoById('{{ video.videoId }}')"><img src="{{ video.thumbnail }}"/></a>
+                <a onclick="openNewUrl('{{ loop_number }}')"><img src="{{ video.thumbnail }}"/></a>
                 <p>{{ video.description }}</p>
                 <p>{{ video.keyword }}</p>
             </div>
