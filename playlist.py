@@ -15,6 +15,7 @@ freezer = Freezer(app)
 
 
 #returns a page with links to all websites
+'''
 @app.route('/pageToKeywords/', methods=["POST", "GET", "OPTIONS"])
 @crossdomain(origin='*')
 def page_to_keywords():
@@ -24,6 +25,7 @@ def page_to_keywords():
                                             station["soup_path_for_keyword"]))
     else:
         return "All is well"
+'''
 
 
 @app.route('/station/<string:name>/')
