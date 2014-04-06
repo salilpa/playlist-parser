@@ -6,9 +6,12 @@ from settings import db, PER_PAGE
 from pagination import Pagination
 from flask_functions import *
 from flask_bootstrap import Bootstrap
+from flask_frozen import Freezer
 
 app = Flask(__name__)
+app.config.from_pyfile('app_config.py')
 Bootstrap(app)
+freezer = Freezer(app)
 
 
 #returns a page with links to all websites
