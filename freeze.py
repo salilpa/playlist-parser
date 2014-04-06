@@ -1,4 +1,4 @@
-from playlist import app
+from playlist import freezer
 
 if __name__ == '__main__':
-    app.freezer.freeze()
+    freezer.freeze()

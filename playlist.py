@@ -26,7 +26,7 @@ def page_to_keywords():
         return "All is well"
 
 
-@app.route('/station/<string:name>')
+@app.route('/station/<string:name>/')
 def station_details(name):
     station = db.stations.find_one({"name": name})
     if station:
@@ -42,7 +42,7 @@ def station_details(name):
         return "Incomplete function"
 
 
-@app.route('/<string:meta_key>/<string:meta_val>/page/<int:page_number>')
+@app.route('/<string:meta_key>/<string:meta_val>/page/<int:page_number>/')
 def get_meta_value(meta_key, meta_val, page_number):
     stations = db.stations.find({"meta." + meta_key: meta_val})
     count = stations.count()
@@ -56,7 +56,7 @@ def get_meta_value(meta_key, meta_val, page_number):
         return "None found"
 
 
-@app.route('/<string:meta_key>/page/<int:page_number>')
+@app.route('/<string:meta_key>/page/<int:page_number>/')
 def get_meta_key(meta_key, page_number):
     meta_values = generate_meta_key_urls(db, meta_key, page_number * PER_PAGE)
     count = len(meta_values)
