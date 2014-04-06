@@ -2,7 +2,7 @@
 {% block title %}Youtube playlist creator{% endblock %}
 {% block scripts %}
     {{ super() }}
-    <script src="../static/player.js"></script>
+    <script src="{{ url_for('static', filename='js/player.js') }}"></script>
 {% endblock %}
 
 {% block content %}

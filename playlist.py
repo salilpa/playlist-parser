@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from functions import *
-from settings import db
+from settings import db, PER_PAGE
 from pagination import Pagination
 from flask_functions import *
 from flask_bootstrap import Bootstrap
