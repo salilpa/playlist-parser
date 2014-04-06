@@ -1,8 +1,6 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template
 from functions import *
-import json
-from decorator import crossdomain
-from settings import db, PER_PAGE
+from settings import db
 from pagination import Pagination
 from flask_functions import *
 from flask_bootstrap import Bootstrap
@@ -92,3 +90,4 @@ def station_details(name):
 
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+app.jinja_env.globals['url_for'] = url_for
