@@ -21,6 +21,7 @@ function onYouTubeIframeAPIReady() {
             'onStateChange': onPlayerStateChange
         }
     });
+    uiChanges();
 }
 
 // 4. The API will call this function when the video player is ready.
@@ -74,7 +75,29 @@ function getHashFromUrl(){
 }
 
 function openNewUrl(videoNumber){
-    var a = window.location.protocol + "//" + window.location.hostname + (window.location.port?":"+window.location.port:"") + window.location.pathname + "#" + videoNumber;
+    var a = window.location.protocol + "//" + window.location.hostname + (window.location.port?":"+window.location.port:"") + window.location.pathname + "#" + videoNumber.toString();
     window.location.href = a;
     window.location.reload();
+}
+
+function activeClass(index){
+    $($("a.thumbnail")[index]).addClass("active")
+}
+
+function uiChanges(){
+    var hash = parseInt(getHashFromUrl());
+    activeClass(hash);
+    if (hash == 0) {
+        $(".previous").addClass("disabled");
+    }
+    else {
+        $("#previous").on("click", function(){openNewUrl(hash-1)})
+    }
+
+    if (hash == videoIds.length-1){
+        $(".next").addClass("disabled");
+    }
+    else {
+        $("#next").on("click", function(){openNewUrl(hash+1)})
+    }
 }
