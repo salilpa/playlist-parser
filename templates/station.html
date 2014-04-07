@@ -3,19 +3,14 @@
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/player.js') }}"></script>
+    <link type="text/css" href="{{ url_for('static', filename='css/mysite.css') }}"/>
 {% endblock %}
 
 {% block content %}
     <div class="container" xmlns="http://www.w3.org/1999/html">
         <div id="player"></div>
             {% for video in videos %}
-                {% if loop.index0 % 4 == 0 %}
-                    <div class="row">
-                {% endif %}
                 {{ macros.thumbnail_for_video(video, loop.index0) }}
-                {% if loop.index0 % 4 == 3 or loop.last %}
-                    </div>
-                {% endif %}
             {% endfor %}
         </div>
     </div>
