@@ -1,9 +1,22 @@
 {% extends "bootstrap/base.html" %}
 {% import 'macros.html' as macros  %}
+{% block title %}{{ seo.title }}{% endblock %}
 {%- block metas %}
     <meta name="author" content="Salil Panikkaveettil">
     <meta http-equiv="content-language" content="en-in">
+    <meta name="keywords" content="{{ seo.keywords }}">
+    <meta name="description" content="{{ seo.description }}">
 {%- endblock%}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/bootstrap-switch.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cookie.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/site.js') }}"></script>
+{% endblock %}
+{%- block styles %}
+    {{ super() }}
+    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='css/bootstrap-switch.min.css') }}"/>
+{%- endblock styles %}
 
 {% block navbar %}
     <nav class="navbar navbar-default container" role="navigation">
@@ -21,8 +34,17 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="{{url_for('.index')}}">home</a></li>
+                <li><a href="{{ url_for(".get_meta_key", meta_key="country", page_number=1) }}">countries</a></li>
+                <li><a href="{{ url_for(".get_meta_key", meta_key="language", page_number=1) }}">languages</a></li>
             </ul>
+            <div id="onlyDesktop">
+                <p class="navbar-text navbar-right">autoplay</p>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="checkbox" name="my-checkbox" data-on-text="on" data-off-text="off">
+                    </div>
+                </form>
+            </div>
         </div><!-- /.navbar-collapse -->
     </nav>
 {% endblock %}

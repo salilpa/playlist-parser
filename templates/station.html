@@ -1,21 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Youtube playlist creator{% endblock %}
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/player.js') }}"></script>
 {% endblock %}
+{%- block styles %}
+    {{ super() }}
+    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='css/mysite.css') }}"/>
+{%- endblock styles %}
+
 
 {% block content %}
     <div class="container" xmlns="http://www.w3.org/1999/html">
-        <div id="player"></div>
+        <ul class="pager">
+            <li class="previous"><a id="previous" href="#">&larr; prev</a></li>
+            <li class="next"><a id="next" href="#">next &rarr;</a></li>
+        </ul>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 flex-video widescreen">
+                <div id="player"></div>
+            </div>
+        </div>
+        <div class="row">
             {% for video in videos %}
-                {% if loop.index0 % 4 == 0 %}
-                    <div class="row">
-                {% endif %}
                 {{ macros.thumbnail_for_video(video, loop.index0) }}
-                {% if loop.index0 % 4 == 3 or loop.last %}
-                    </div>
-                {% endif %}
             {% endfor %}
         </div>
     </div>

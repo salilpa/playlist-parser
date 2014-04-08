@@ -9,41 +9,16 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 //    after the API code downloads.
 var player;
 var videoIds;
-function onYouTubeIframeAPIReady() {
-    videoIds = getVideoIds()
-    player = new YT.Player('player', {
-        height: '390',
-        width: '640',
-        //find the first video id
-        videoId: videoIds[getHashFromUrl()],
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-}
 
 // 4. The API will call this function when the video player is ready.
 
 function onPlayerReady(event) {
-    event.target.playVideo();
+    if ($('input[name="my-checkbox"]').bootstrapSwitch('state')){
+        event.target.playVideo();
+    }
+    //
 }
 
-// 5. The API calls this function when the player's state changes.
-//    The function indicates that when playing a video (state=1),
-//    the player should play for six seconds and then stop.
-/*
-var done = false;
-function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.PLAYING && !done) {
-        setTimeout(stopVideo, 6000);
-        done = true;
-    }
-}
-function stopVideo() {
-    player.stopVideo();
-}
-*/
 function onPlayerStateChange(event) {
             if(event.data === 0) {
                 currentItem = player.getVideoData().video_id;
@@ -74,7 +49,44 @@ function getHashFromUrl(){
 }
 
 function openNewUrl(videoNumber){
-    var a = window.location.protocol + "//" + window.location.hostname + (window.location.port?":"+window.location.port:"") + window.location.pathname + "#" + videoNumber;
+    var a = window.location.protocol + "//" + window.location.hostname + (window.location.port?":"+window.location.port:"") + window.location.pathname + "#" + videoNumber.toString();
     window.location.href = a;
     window.location.reload();
+}
+
+function activeClass(index){
+    $($("a.thumbnail")[index]).addClass("active")
+}
+
+function uiChanges(){
+    var hash = parseInt(getHashFromUrl());
+    activeClass(hash);
+    if (hash == 0) {
+        $(".previous").addClass("disabled");
+    }
+    else {
+        $("#previous").on("click", function(){openNewUrl(hash-1)})
+    }
+
+    if (hash == videoIds.length-1){
+        $(".next").addClass("disabled");
+    }
+    else {
+        $("#next").on("click", function(){openNewUrl(hash+1)})
+    }
+}
+
+function onYouTubeIframeAPIReady() {
+    videoIds = getVideoIds()
+    player = new YT.Player('player', {
+        height: '390',
+        width: '640',
+        //find the first video id
+        videoId: videoIds[getHashFromUrl()],
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+    uiChanges();
 }
