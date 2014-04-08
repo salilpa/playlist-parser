@@ -1,8 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% import 'macros.html' as macros  %}
+{% block title %}{{ seo.title }}{% endblock %}
 {%- block metas %}
     <meta name="author" content="Salil Panikkaveettil">
     <meta http-equiv="content-language" content="en-in">
+    <meta name="keywords" content="{{ seo.keywords }}">
+    <meta name="description" content="{{ seo.description }}">
 {%- endblock%}
 
 {% block navbar %}
