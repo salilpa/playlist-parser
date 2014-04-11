@@ -7,7 +7,7 @@ function isAutoPlay(){
     if (docCookies.hasItem("autoplay")){
         return (docCookies.getItem("autoplay") == "true");
     } else{
-        docCookies.setItem("autoplay", "false");
+        docCookies.setItem("autoplay", "false", Infinity, "/");
         return false;
     }
 }
@@ -20,5 +20,5 @@ $("[name='my-checkbox']").bootstrapSwitch();
 $('input[name="my-checkbox"]').bootstrapSwitch('state', isAutoPlay());
 
 $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-    docCookies.setItem("autoplay", state.toString());
+    docCookies.setItem("autoplay", state.toString(), Infinity, "/");
 });
