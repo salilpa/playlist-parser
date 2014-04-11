@@ -56,13 +56,13 @@ def get_meta_key(meta_key, page_number):
         "description": "watch the top music videos trending on music charts automatically."
                        "track the top music charts available in your " + meta_key + " page " + str(page_number)
     }
-    meta_values = generate_meta_key_urls(db, meta_key, page_number * PER_PAGE)
+    meta_values = generate_meta_key_urls(db, meta_key, PER_PAGE, (page_number-1) * PER_PAGE)
     count = len(meta_values)
-    if count > (page_number - 1) * PER_PAGE:
+    if count > 0:
         #should return list of objects divided by page
         meta_to_be_displayed = {
             "name": meta_key,
-            "urls": meta_values[(page_number - 1) * PER_PAGE:page_number * PER_PAGE]
+            "urls": meta_values
         }
         pagination = Pagination(page_number, PER_PAGE, count)
         return render_template("meta_list.html", pagination=pagination, meta_to_be_displayed=meta_to_be_displayed, seo=seo)
