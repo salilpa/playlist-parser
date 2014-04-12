@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/player.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/qunit/1.14.0/qunit.min.js"></script>
+    <script src="{{ url_for('static', filename='js/player_test.js') }}"></script>
+{% endblock %}
+{%- block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/qunit.css') }}">
+    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='css/mysite.css') }}"/>
+{%- endblock styles %}
+
+{% block navbar %}
+{% endblock %}
+{% block content %}
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+{% endblock %}
