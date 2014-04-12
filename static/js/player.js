@@ -16,18 +16,17 @@ function onPlayerReady(event) {
     if ($('input[name="my-checkbox"]').bootstrapSwitch('state')){
         event.target.playVideo();
     }
-    //
 }
 
 function onPlayerStateChange(event) {
-            if(event.data === 0) {
-                currentItem = player.getVideoData().video_id;
-                nextIndex = videoIds.indexOf(currentItem) + 1;
-                if (nextIndex+1 != 0 && typeof (videoIds[nextIndex]) != "undefined" ){
-                    openNewUrl(nextIndex);
-                }
-            }
+    if(event.data === 0) {
+        currentItem = player.getVideoData().video_id;
+        nextIndex = videoIds.indexOf(currentItem) + 1;
+        if (nextIndex+1 != 0 && typeof (videoIds[nextIndex]) != "undefined" ){
+            openNewUrl(nextIndex);
         }
+    }
+}
 
 function getVideoIds() {
     var videoIds = [];
@@ -41,7 +40,7 @@ function getVideoIds() {
 
 function getHashFromUrl(){
     if(window.location.hash) {
-      return window.location.hash.substring(1);
+      return parseInt(window.location.hash.substring(1));
     } else {
       return 0
     }
@@ -57,8 +56,7 @@ function activeClass(index){
     $($("a.thumbnail")[index]).addClass("active")
 }
 
-function uiChanges(){
-    var hash = parseInt(getHashFromUrl());
+function uiChanges(videoIds, hash){
     activeClass(hash);
     if (hash <= 0 || hash > videoIds.length) {
         $(".previous").addClass("disabled");
@@ -75,8 +73,8 @@ function uiChanges(){
     }
 }
 
-function getVideo(index){
-    var index = parseInt(index)
+function getVideo(index, videoIds){
+    var index = parseInt(index);
     if ((index >= 0) && (index < videoIds.length)){
         return videoIds[index];
     } else{
@@ -90,11 +88,11 @@ function onYouTubeIframeAPIReady() {
         height: '390',
         width: '640',
         //find the first video id
-        videoId: getVideo(getHashFromUrl()),
+        videoId: getVideo(getHashFromUrl(), videoIds),
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
         }
     });
-    uiChanges();
+    uiChanges(videoIds, parseInt(getHashFromUrl()));
 }
