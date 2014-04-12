@@ -34,15 +34,14 @@ function getVideoIds() {
     videos = $(".hidden.videoId");
     videosLength = videos.length;
     for (var i=0; i<videosLength; i++){
-        videoIds.push(videos[i].innerText);
+        videoIds.push(videos[i].innerHTML);
     }
     return videoIds;
 }
 
 function getHashFromUrl(){
     if(window.location.hash) {
-      return window.location.hash.substring(1); //Puts hash in variable, and removes the # character
-      // hash found
+      return window.location.hash.substring(1);
     } else {
       return 0
     }
@@ -61,18 +60,27 @@ function activeClass(index){
 function uiChanges(){
     var hash = parseInt(getHashFromUrl());
     activeClass(hash);
-    if (hash == 0) {
+    if (hash <= 0 || hash > videoIds.length) {
         $(".previous").addClass("disabled");
     }
     else {
         $("#previous").on("click", function(){openNewUrl(hash-1)})
     }
 
-    if (hash == videoIds.length-1){
+    if (hash >= videoIds.length-1 || hash < -1){
         $(".next").addClass("disabled");
     }
     else {
         $("#next").on("click", function(){openNewUrl(hash+1)})
+    }
+}
+
+function getVideo(index){
+    var index = parseInt(index)
+    if ((index >= 0) && (index < videoIds.length)){
+        return videoIds[index];
+    } else{
+        return "dQw4w9WgXcQ";
     }
 }
 
@@ -82,7 +90,7 @@ function onYouTubeIframeAPIReady() {
         height: '390',
         width: '640',
         //find the first video id
-        videoId: videoIds[getHashFromUrl()],
+        videoId: getVideo(getHashFromUrl()),
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
