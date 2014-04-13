@@ -16,3 +16,8 @@ test("getVideo", function() {
     correctVideo(-1,["hjdfjvhdbvb"], "dQw4w9WgXcQ");
 });
 
+test("getVideoIds", function(){
+    var correct_videoIds = ["hHUbLv4ThOo", "Y8ygKnBtKAk", "xKkb13IU_DE"];
+    var extracted_videoIds = getVideoIds();
+    equal(extracted_videoIds.toString(), correct_videoIds.toString());
+});
