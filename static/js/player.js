@@ -52,24 +52,31 @@ function openNewUrl(videoNumber){
     window.location.reload();
 }
 
-function activeClass(index){
-    $($("a.thumbnail")[index]).addClass("active")
+function activeClass(obj_name,index){
+    $($(obj_name)[index]).addClass("active")
 }
 
 function uiChanges(videoIds, hash){
-    activeClass(hash);
-    if (hash <= 0 || hash > videoIds.length) {
-        $(".previous").addClass("disabled");
-    }
-    else {
-        $("#previous").on("click", function(){openNewUrl(hash-1)})
-    }
+    activeClass("a.thumbnail",hash);
+    setNextPrevious(videoIds,hash, ".previous", "#previous", true);
+    setNextPrevious(videoIds,hash, ".next", "#next", false);
+}
 
-    if (hash >= videoIds.length-1 || hash < -1){
-        $(".next").addClass("disabled");
-    }
-    else {
-        $("#next").on("click", function(){openNewUrl(hash+1)})
+function setNextPrevious(videoIds, hash, class_name, id_name, previous){
+    if (previous == true){
+        if (hash <= 0 || hash > videoIds.length) {
+            $(class_name).addClass("disabled");
+        }
+        else {
+            $(id_name).on("click", function(){openNewUrl(hash-1)})
+        }
+    } else {
+        if (hash >= videoIds.length-1 || hash < -1){
+            $(class_name).addClass("disabled");
+        }
+        else {
+            $(id_name).on("click", function(){openNewUrl(hash+1)})
+        }
     }
 }
 
