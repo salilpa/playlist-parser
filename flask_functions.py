@@ -7,7 +7,7 @@ def url_for(endpoint, **kwargs):
     return flask_url_for(endpoint, **kwargs)
 
 
-def generate_meta_key_urls(db, attr, size=4, start_key = 0):
+def generate_meta_key_urls(db, attr, size=4, start_key=0):
     #returns urls for different value of a specific key
     #eg country returns urls for india and us
 
@@ -18,7 +18,7 @@ def generate_meta_key_urls(db, attr, size=4, start_key = 0):
         urls.append({
             "name": keys,
             "url": url_for(".get_meta_value", meta_key=attr, meta_val=keys, page_number=1),
-            "count" : db.stations.find({"meta." + attr: keys}).count()
+            "count": db.stations.find({"meta." + attr: keys}).count()
         })
 
     return urls

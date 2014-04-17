@@ -2,6 +2,7 @@
 
 {% block content %}
     <div class="container">
+        {{ macros.breadcrumbs(breadcrumbs) }}
         {{ macros.create_url_block(url_blocks) }}
     </div>
 {% endblock %}

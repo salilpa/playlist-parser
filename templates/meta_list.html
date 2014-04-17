@@ -2,6 +2,7 @@
 
 {% block content %}
     <div class="container">
+        {{ macros.breadcrumbs(breadcrumbs) }}
         {% if pagination %}
             {{ macros.render_pagination(pagination) }}
         {% endif %}
