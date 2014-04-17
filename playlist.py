@@ -88,6 +88,8 @@ def get_meta_value(meta_key, meta_val, page_number):
         stations_to_be_displayed = stations[(page_number - 1) * PER_PAGE:page_number * PER_PAGE]
         station_urls = create_url_objects_from_stations(stations_to_be_displayed)
         pagination = Pagination(page_number, PER_PAGE, count)
+        meta_key_pos = db.stations.distinct("meta." + meta_key).index(meta_val)
+        meta_page_number = meta_key_pos/PER_PAGE + 1
         breadcrumbs = [
             {
                 "name": "home",
@@ -95,7 +97,7 @@ def get_meta_value(meta_key, meta_val, page_number):
             },
             {
                 "name": meta_key,
-                "link": url_for(".get_meta_key", meta_key=meta_key, page_number=1)
+                "link": url_for(".get_meta_key", meta_key=meta_key, page_number=meta_page_number)
             },
             {
                 "name": meta_val,
@@ -120,6 +122,8 @@ def station_details(name):
             "description": "watch the top music videos trending on music charts automatically."
                            "track the top youtube videos of " + station["display_name"]
         }
+        meta_key_pos = db.stations.distinct("name").index(name)
+        meta_page_number = meta_key_pos/PER_PAGE + 1
         breadcrumbs = [
             {
                 "name": "home",
@@ -127,7 +131,7 @@ def station_details(name):
             },
             {
                 "name": "stations",
-                "link": url_for(".stations", page_number=1)
+                "link": url_for(".stations", page_number=meta_page_number)
             },
             {
                 "name": station["display_name"],
