@@ -111,6 +111,14 @@ def station_details(name):
     else:
         return "Incomplete function"
 
+@app.route('/test/js/')
+def station_detail_test():
+    seo = {
+        "title": "testing of player js",
+        "keywords": "",
+        "description": "testing result of player js"
+    }
+    return render_template("js_test.html", seo=seo)
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 app.jinja_env.globals['url_for'] = url_for

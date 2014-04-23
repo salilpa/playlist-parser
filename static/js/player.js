@@ -16,18 +16,17 @@ function onPlayerReady(event) {
     if ($('input[name="my-checkbox"]').bootstrapSwitch('state')){
         event.target.playVideo();
     }
-    //
 }
 
 function onPlayerStateChange(event) {
-            if(event.data === 0) {
-                currentItem = player.getVideoData().video_id;
-                nextIndex = videoIds.indexOf(currentItem) + 1;
-                if (nextIndex+1 != 0 && typeof (videoIds[nextIndex]) != "undefined" ){
-                    openNewUrl(nextIndex);
-                }
-            }
+    if(event.data === 0) {
+        currentItem = player.getVideoData().video_id;
+        nextIndex = videoIds.indexOf(currentItem) + 1;
+        if (nextIndex+1 != 0 && typeof (videoIds[nextIndex]) != "undefined" ){
+            openNewUrl(nextIndex);
         }
+    }
+}
 
 function getVideoIds() {
     var videoIds = [];
@@ -41,7 +40,7 @@ function getVideoIds() {
 
 function getHashFromUrl(){
     if(window.location.hash) {
-      return window.location.hash.substring(1);
+      return parseInt(window.location.hash.substring(1));
     } else {
       return 0
     }
@@ -53,30 +52,36 @@ function openNewUrl(videoNumber){
     window.location.reload();
 }
 
-function activeClass(index){
-    $($("a.thumbnail")[index]).addClass("active")
+function activeClass(obj_name,index){
+    $($(obj_name)[index]).addClass("active")
 }
 
-function uiChanges(){
-    var hash = parseInt(getHashFromUrl());
-    activeClass(hash);
-    if (hash <= 0 || hash > videoIds.length) {
-        $(".previous").addClass("disabled");
-    }
-    else {
-        $("#previous").on("click", function(){openNewUrl(hash-1)})
-    }
+function uiChanges(videoIds, hash){
+    activeClass("a.thumbnail",hash);
+    setNextPrevious(videoIds,hash, ".previous", "#previous", true);
+    setNextPrevious(videoIds,hash, ".next", "#next", false);
+}
 
-    if (hash >= videoIds.length-1 || hash < -1){
-        $(".next").addClass("disabled");
-    }
-    else {
-        $("#next").on("click", function(){openNewUrl(hash+1)})
+function setNextPrevious(videoIds, hash, class_name, id_name, previous){
+    if (previous == true){
+        if (hash <= 0 || hash > videoIds.length) {
+            $(class_name).addClass("disabled");
+        }
+        else {
+            $(id_name).on("click", function(){openNewUrl(hash-1)})
+        }
+    } else {
+        if (hash >= videoIds.length-1 || hash < -1){
+            $(class_name).addClass("disabled");
+        }
+        else {
+            $(id_name).on("click", function(){openNewUrl(hash+1)})
+        }
     }
 }
 
-function getVideo(index){
-    var index = parseInt(index)
+function getVideo(index, videoIds){
+    var index = parseInt(index);
     if ((index >= 0) && (index < videoIds.length)){
         return videoIds[index];
     } else{
@@ -90,11 +95,11 @@ function onYouTubeIframeAPIReady() {
         height: '390',
         width: '640',
         //find the first video id
-        videoId: getVideo(getHashFromUrl()),
+        videoId: getVideo(getHashFromUrl(), videoIds),
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
         }
     });
-    uiChanges();
+    uiChanges(videoIds, parseInt(getHashFromUrl()));
 }
