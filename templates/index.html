@@ -4,5 +4,11 @@
     <div class="container">
         {{ macros.breadcrumbs(breadcrumbs) }}
         {{ macros.create_url_block(url_blocks) }}
+        <h2><a href="{{ station_group.url }}">{{ station_group.name }}</a></h2>
+        <div class="row">
+            {% for station in station_group.stations %}
+                    {{ macros.thumbnail_for_stations(station) }}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

@@ -30,6 +30,13 @@ def index():
         "url": url_for(".get_meta_key", meta_key="language", page_number=1),
         "sub_urls": generate_meta_key_urls(db, "language", 3)
     })
+    station_list = db.stations.find()[0:3]
+    station_urls = create_url_objects_from_stations(station_list)
+    station_group = {
+        "name": "stations",
+        "url": url_for(".stations", page_number=1),
+        "stations": station_urls
+    }
     breadcrumbs = [
         {
             "name": "home",
@@ -37,7 +44,7 @@ def index():
         }
     ]
     #find all meta keys and give urls to it
-    return render_template("index.html", url_blocks=url_blocks, seo=seo, breadcrumbs=breadcrumbs)
+    return render_template("index.html", url_blocks=url_blocks, seo=seo, breadcrumbs=breadcrumbs, station_group=station_group)
 
 
 @app.route('/<string:meta_key>/page/<int:page_number>/')
@@ -49,7 +56,6 @@ def get_meta_key(meta_key, page_number):
                        "track the top music charts available in your " + meta_key + " page " + str(page_number)
     }
     meta_values = generate_meta_key_urls(db, meta_key, PER_PAGE, (page_number-1) * PER_PAGE)
-    #meta_values.sort(key=lambda x: x["count"], reverse=True)
     count = len(meta_values)
     if count > 0:
         #should return list of objects divided by page
