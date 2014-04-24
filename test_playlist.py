@@ -33,6 +33,10 @@ def test_website():
     expected_station_data = "globalcharts.tv"
     assert expected_station_data in rv.data
 
+    rv = test_app.get('/stations/page/1', follow_redirects=True)
+    expected_station_data = "globalcharts.tv"
+    assert expected_station_data in rv.data
+
 
 def test_generate_meta_key_urls():
     with playlist.app.test_request_context():

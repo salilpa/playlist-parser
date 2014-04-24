@@ -12,20 +12,6 @@ Bootstrap(app)
 freezer = Freezer(app)
 
 
-#returns a page with links to all websites
-'''
-@app.route('/pageToKeywords/', methods=["POST", "GET", "OPTIONS"])
-@crossdomain(origin='*')
-def page_to_keywords():
-    if request.method == 'POST':
-        station = json.loads(request.data)
-        return "|".join(video_text_from_url(station["url"], station["settings"], station["soup_path_for_list"],
-                                            station["soup_path_for_keyword"]))
-    else:
-        return "All is well"
-'''
-
-
 @app.route('/')
 def index():
     seo = {
@@ -44,8 +30,21 @@ def index():
         "url": url_for(".get_meta_key", meta_key="language", page_number=1),
         "sub_urls": generate_meta_key_urls(db, "language", 3)
     })
+    station_list = db.stations.find()[0:3]
+    station_urls = create_url_objects_from_stations(station_list)
+    station_group = {
+        "name": "stations",
+        "url": url_for(".stations", page_number=1),
+        "stations": station_urls
+    }
+    breadcrumbs = [
+        {
+            "name": "home",
+            "link": url_for(".index")
+        }
+    ]
     #find all meta keys and give urls to it
-    return render_template("index.html", url_blocks=url_blocks, seo=seo)
+    return render_template("index.html", url_blocks=url_blocks, seo=seo, breadcrumbs=breadcrumbs, station_group=station_group)
 
 
 @app.route('/<string:meta_key>/page/<int:page_number>/')
@@ -65,7 +64,17 @@ def get_meta_key(meta_key, page_number):
             "urls": meta_values
         }
         pagination = Pagination(page_number, PER_PAGE, count)
-        return render_template("meta_list.html", pagination=pagination, meta_to_be_displayed=meta_to_be_displayed, seo=seo)
+        breadcrumbs = [
+            {
+                "name": "home",
+                "link": url_for(".index")
+            },
+            {
+                "name": meta_key,
+                "link": url_for(".get_meta_key", meta_key=meta_key, page_number=1)
+            }
+        ]
+        return render_template("meta_list.html", pagination=pagination, meta_to_be_displayed=meta_to_be_displayed, seo=seo, breadcrumbs=breadcrumbs)
     else:
         return "None found"
 
@@ -85,7 +94,23 @@ def get_meta_value(meta_key, meta_val, page_number):
         stations_to_be_displayed = stations[(page_number - 1) * PER_PAGE:page_number * PER_PAGE]
         station_urls = create_url_objects_from_stations(stations_to_be_displayed)
         pagination = Pagination(page_number, PER_PAGE, count)
-        return render_template("station_list.html", pagination=pagination, stations=station_urls, seo=seo)
+        meta_key_pos = db.stations.distinct("meta." + meta_key).index(meta_val)
+        meta_page_number = meta_key_pos/PER_PAGE + 1
+        breadcrumbs = [
+            {
+                "name": "home",
+                "link": url_for(".index")
+            },
+            {
+                "name": meta_key,
+                "link": url_for(".get_meta_key", meta_key=meta_key, page_number=meta_page_number)
+            },
+            {
+                "name": meta_val,
+                "link": url_for(".get_meta_value", meta_key=meta_key, meta_val=meta_val, page_number=1)
+            }
+        ]
+        return render_template("station_list.html", pagination=pagination, stations=station_urls, seo=seo, breadcrumbs=breadcrumbs)
     else:
         return "None found"
 
@@ -103,9 +128,55 @@ def station_details(name):
             "description": "watch the top music videos trending on music charts automatically."
                            "track the top youtube videos of " + station["display_name"]
         }
+        meta_key_pos = db.stations.distinct("name").index(name)
+        meta_page_number = meta_key_pos/PER_PAGE + 1
+        breadcrumbs = [
+            {
+                "name": "home",
+                "link": url_for(".index")
+            },
+            {
+                "name": "stations",
+                "link": url_for(".stations", page_number=meta_page_number)
+            },
+            {
+                "name": station["display_name"],
+                "link": url_for(".station_details", name=name)
+            }
+        ]
         for keyword in keywords:
             videos.append(get_video_from_keyword(keyword))
-        return render_template("station.html", videos=videos, seo=seo)
+        return render_template("station.html", videos=videos, seo=seo, breadcrumbs=breadcrumbs)
+    #get the radio station from the object
+    #get keywords from the object parameter
+    else:
+        return "Incomplete function"
+
+@app.route('/stations/page/<int:page_number>/')
+def stations(page_number):
+    station_list = db.stations.find()
+    count = station_list.count()
+    if station_list:
+        seo = {
+            "title": "watch youtube videos of top charts page " + str(page_number),
+            "keywords": "youtube playlist, music charts, automatic playlist",
+            "description": "watch the top music videos trending on music charts automatically."
+                           "track the top youtube videos of your favorite music page " + str(page_number)
+        }
+        stations_to_be_displayed = station_list[(page_number - 1) * PER_PAGE:page_number * PER_PAGE]
+        pagination = Pagination(page_number, PER_PAGE, count)
+        station_urls = create_url_objects_from_stations(stations_to_be_displayed)
+        breadcrumbs = [
+            {
+                "name": "home",
+                "link": url_for(".index")
+            },
+            {
+                "name": "stations",
+                "link": url_for(".stations", page_number=1)
+            }
+        ]
+        return render_template("station_list.html", pagination=pagination, stations=station_urls, seo=seo, breadcrumbs=breadcrumbs)
     #get the radio station from the object
     #get keywords from the object parameter
     else:

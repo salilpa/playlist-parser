@@ -69,3 +69,15 @@
         {% endif %}
     </ul>
 {% endmacro %}
+
+{% macro breadcrumbs(url_list) %}
+    <ol class="breadcrumb">
+        {% for url in url_list %}
+            {% if loop.last %}
+                <li class="active">{{ url.name }}</li>
+            {% else %}
+                <li><a href="{{ url.link }}">{{ url.name }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+{% endmacro %}
