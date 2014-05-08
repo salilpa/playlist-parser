@@ -191,5 +191,10 @@ def station_detail_test():
     }
     return render_template("js_test.html", seo=seo)
 
+@app.route('/google92a69203eccf42a4.html')
+def google():
+    return render_template('google92a69203eccf42a4.html')
+
+
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 app.jinja_env.globals['url_for'] = url_for
