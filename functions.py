@@ -62,14 +62,11 @@ def get_suggested_keyword(keyword):
 
 
 def get_tag(name, browser, class_name):
-    try:
-        tag = browser.find_element_by_class_name(class_name)
+    for tag in browser.find_elements_by_class_name(class_name):
         if tag.text == name:
             return tag
-        else:
-            return False
-    except NoSuchElementException as e:
-        return False
+    return False
+
 
 def has_next_page(browser, id_name):
     try:
@@ -105,8 +102,8 @@ def find_project(project_url, browser, name, class_name, id_name):
             return tag
         else:
             next_page = has_next_page(browser, id_name)
-            if not next_page:
-                break
-            else:
+            if next_page:
                 browser.get(next_page)
+            else:
+                break
     return False
