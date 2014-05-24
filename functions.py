@@ -62,9 +62,11 @@ def get_suggested_keyword(keyword):
 
 
 def get_tag(name, browser, class_name):
+    i = 0
     for tag in browser.find_elements_by_class_name(class_name):
         if tag.text == name:
-            return tag
+            return i
+        i += 1
     return False
 
 
@@ -94,11 +96,12 @@ def sign_in(browser, url, password_field, password, email_field, email, button, 
 
     return browser
 
+
 def find_project(project_url, browser, name, class_name, id_name):
     browser.get(project_url)
     while True:
         tag = get_tag(name, browser, class_name)
-        if tag:
+        if tag is not False:
             return tag
         else:
             next_page = has_next_page(browser, id_name)

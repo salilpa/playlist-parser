@@ -56,7 +56,7 @@ def test_get_suggested_keyword():
 def test_get_tag():
     browser = webdriver.Firefox()
     browser.get("https://www.codeship.io/")
-    assert type(get_tag('Sign in', browser, "sign_in_email")) is WebElement
+    assert type(get_tag('Sign in', browser, "sign_in_email")) is int
     assert get_tag('Sign in blah', browser, "sign_in_email") is False
     assert get_tag('Sign in', browser, "blah_email") is False
     browser.quit()
@@ -83,9 +83,9 @@ def test_has_next_page():
 def test_find_project():
     browser = webdriver.Firefox()
     sign_in(browser, url, password_field, PASS, email_field, EMAIL, button, wait_box)
+    assert type(find_project(PROJECT_URL, browser, name, class_name, "blah_name")) is int
     assert find_project(PROJECT_URL, browser, name, "blah_name", "blah_name") is False
     assert find_project(PROJECT_URL, browser, "random_name", class_name, id_name) is False
-    assert type(find_project(PROJECT_URL, browser, name, class_name, "blah_name")) is WebElement
-    assert type(find_project(PROJECT_URL, browser, name, class_name, id_name)) is WebElement
-    assert type(find_project(PROJECT_URL, browser, "jsTesting", class_name, id_name)) is WebElement
+    assert type(find_project(PROJECT_URL, browser, name, class_name, id_name)) is int
+    assert type(find_project(PROJECT_URL, browser, "jsTesting", class_name, id_name)) is int
     browser.quit()
