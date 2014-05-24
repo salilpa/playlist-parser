@@ -22,7 +22,7 @@ test_app = playlist.app.test_client()
 def test_website():
 
     rv = test_app.get('/station/radioMirchiTvmMalayalamTop20', follow_redirects=True)
-    expected_station_data = "globalcharts.tv"
+    expected_station_data = "musicsigma.com"
     assert expected_station_data in rv.data
 
     rv = test_app.get('/station/wrongName', follow_redirects=True)
@@ -30,11 +30,11 @@ def test_website():
     assert rv.data == expected_station_data
 
     rv = test_app.get('/', follow_redirects=True)
-    expected_station_data = "globalcharts.tv"
+    expected_station_data = "musicsigma.com"
     assert expected_station_data in rv.data
 
     rv = test_app.get('/stations/page/1', follow_redirects=True)
-    expected_station_data = "globalcharts.tv"
+    expected_station_data = "musicsigma.com"
     assert expected_station_data in rv.data
 
 
