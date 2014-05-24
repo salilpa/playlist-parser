@@ -1,4 +1,5 @@
 from functions import *
+from settings import *
 
 
 def test_video_text_from_url():
@@ -50,3 +51,40 @@ def test_get_video_from_keyword():
 def test_get_suggested_keyword():
     assert "" == get_suggested_keyword("fjghkkdhfgjdk")
     assert "" != get_suggested_keyword("poovin maarile")
+
+
+def test_get_tag():
+    browser = webdriver.Firefox()
+    browser.get("https://www.codeship.io/")
+    assert type(get_tag('Sign in', browser, "sign_in_email")) is WebElement
+    assert get_tag('Sign in blah', browser, "sign_in_email") is False
+    assert get_tag('Sign in', browser, "blah_email") is False
+    browser.quit()
+
+
+def test_sign_in():
+    browser = webdriver.Firefox()
+    assert sign_in(browser, url, password_field, "blah", "blah", "blah@blah.com", button, wait_box) is False
+    assert sign_in(browser, url, "blah", "blah", email_field, "blah@blah.com", button, wait_box) is False
+    assert sign_in(browser, url, password_field, PASS, email_field, EMAIL, "blah", wait_box) is False
+    assert type(sign_in(browser, url, password_field, PASS, email_field, EMAIL, button, wait_box)) is webdriver.Firefox
+    browser.quit()
+
+
+def test_has_next_page():
+    browser = webdriver.Firefox()
+    sign_in(browser, url, password_field, PASS, email_field, EMAIL, button, wait_box)
+    browser.get(PROJECT_URL)
+    assert has_next_page(browser, "blah") is False
+    assert type(has_next_page(browser, "older")) is unicode
+    browser.quit()
+
+
+def test_find_project():
+    browser = webdriver.Firefox()
+    sign_in(browser, url, password_field, PASS, email_field, EMAIL, button, wait_box)
+    assert find_project(PROJECT_URL, browser, name, "blah_name", "blah_name") is False
+    assert find_project(PROJECT_URL, browser, name, class_name, "blah_name") is False
+    assert type(find_project(PROJECT_URL, browser, name, class_name, id_name)) is WebElement
+    assert type(find_project(PROJECT_URL, browser, "jsTesting", class_name, id_name)) is WebElement
+    browser.quit()

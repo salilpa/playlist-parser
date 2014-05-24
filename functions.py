@@ -3,7 +3,10 @@ import requests
 import re
 from apiclient.discovery import build
 from settings import DEVELOPER_KEY
-
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.remote.webelement import WebElement
+import selenium.webdriver.support.ui as ui
 
 #returns a list of keywords from the url given using the soup paths
 def video_text_from_url(url, settings, soup_path_for_list, soup_path_for_keyword):
@@ -56,3 +59,54 @@ def get_suggested_keyword(keyword):
             return ""
     else:
         return ""
+
+
+def get_tag(name, browser, class_name):
+    try:
+        tag = browser.find_element_by_class_name(class_name)
+        if tag.text == name:
+            return tag
+        else:
+            return False
+    except NoSuchElementException as e:
+        return False
+
+def has_next_page(browser, id_name):
+    try:
+        id = browser.find_element_by_id(id_name)
+        return id.get_attribute('href')
+    except NoSuchElementException as e:
+        return False
+
+
+def sign_in(browser, url, password_field, password, email_field, email, button, wait_box):
+    wait = ui.WebDriverWait(browser, 10)
+    browser.get(url)
+
+    try :
+        email_box = browser.find_element_by_id(email_field)
+        email_box.send_keys(email)
+        password_box = browser.find_element_by_id(password_field)
+        password_box.send_keys(password)
+        button = browser.find_element_by_id(button)
+        button.click()
+    except NoSuchElementException as e:
+        return False
+
+    wait.until(lambda browser: browser.find_elements_by_class_name(wait_box))
+
+    return browser
+
+def find_project(project_url, browser, name, class_name, id_name):
+    browser.get(project_url)
+    while True:
+        tag = get_tag(name, browser, class_name)
+        if tag:
+            return tag
+        else:
+            next_page = has_next_page(browser, id_name)
+            if not next_page:
+                break
+            else:
+                browser.get(next_page)
+    return False
