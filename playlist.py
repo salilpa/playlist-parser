@@ -1,10 +1,13 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory, make_response
 from functions import *
 from settings import db, PER_PAGE
 from pagination import Pagination
 from flask_functions import *
 from flask_bootstrap import Bootstrap
 from flask_frozen import Freezer
+import os
+from datetime import datetime, timedelta
+
 
 app = Flask(__name__)
 app.config.from_pyfile('app_config.py')
@@ -194,6 +197,30 @@ def station_detail_test():
 @app.route('/google92a69203eccf42a4.html')
 def google():
     return render_template('google92a69203eccf42a4.html')
+
+
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'robots/robots.txt')
+
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    """Generate sitemap.xml. Makes a list of urls and date modified."""
+    pages = []
+    ten_days_ago = (datetime.now() - timedelta(days=1)).date().isoformat()
+    # static pages
+    for rule in app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments) == 0:
+            pages.append(
+                [rule.rule, ten_days_ago]
+            )
+
+    sitemap_xml = render_template('sitemap.xml', pages=pages)
+    response= make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
 
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
