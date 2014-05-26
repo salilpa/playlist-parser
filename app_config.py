@@ -18,3 +18,4 @@ FREEZER_DESTINATION = PROJECT_ROOT
 FREEZER_BASE_URL = "http://musicsigma.com"
 FREEZER_REMOVE_EXTRA_FILES = False  # IMPORTANT: If this is True, all app files
                                     # will be deleted when you run the freezer
+SECRET_KEY = 'njanorusiteundakki'

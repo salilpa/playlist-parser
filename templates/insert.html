@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+        {% if error %}
+            <div class="alert alert-danger">
+                <h2>Error</h2>
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+        {% if keywords %}
+            <div class="alert alert-success">
+            {% for keyword in keywords %}
+                <p>{{ keyword }}</p>
+            {% endfor %}
+            </div>
+        {% endif %}
+        {% if form %}
+            {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}) }}
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

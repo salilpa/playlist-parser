@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 from flask_frozen import Freezer
 import os
 from datetime import datetime, timedelta
+from forms import InsertForm
 
 
 app = Flask(__name__)
@@ -209,9 +210,97 @@ def sitemap():
     sitemap_xml = render_template('sitemap.xml')
     response = make_response(sitemap_xml)
     response.headers["Content-Type"] = "application/xml"
-
     return response
 
+@app.route('/insert', methods=['GET', 'POST'])
+def insert():
+    form = InsertForm()
+    seo = {
+        "title": "Add stations to db",
+        "keywords": "youtube playlist, music charts, automatic playlist",
+        "description": "Add stations to db"
+    }
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            name = form.name.data
+            display_name = form.display_name.data
+            url = form.url.data
+            parser = form.parser.data
+            user_agent = form.user_agent.data
+            list_tag = form.list_tag.data
+            list_attr_key = form.list_attr_key.data
+            list_attr_val = form.list_attr_val.data
+            keyword_tag_1 = form.keyword_tag_1.data
+            keyword_attr_key_1 = form.keyword_attr_key_1.data
+            keyword_attr_val_1 = form.keyword_attr_val_1.data
+            if keyword_attr_val_1 == "":
+                keyword_attr_val_1 = None
+            keyword_tag_2 = form.keyword_tag_2.data
+            keyword_attr_key_2 = form.keyword_attr_key_2.data
+            keyword_attr_val_2 = form.keyword_attr_val_2.data
+            if keyword_attr_val_2 == "":
+                keyword_attr_val_2 = None
+            country = form.country.data
+            language = form.language.data
+            insert_val = form.insert_val.data
+            #check url and name is not yet present in db
+            url_count = db.stations.find({"url": url}).count()
+            name_count = db.stations.find({"name": name}).count()
+            if url_count == 0 and name_count == 0:
+                settings = {
+                    "parser": parser,
+                    "headers": {
+                        "User-Agent": user_agent
+                    }
+                }
+                soup_path_for_list = {
+                    "tag": list_tag,
+                    "attr": {
+                        list_attr_key: list_attr_val
+                    }
+                }
+
+                soup_path_for_keyword = {
+                    "paths": [
+                        {
+                            "tag": keyword_tag_1,
+                            "attr": {
+                                keyword_attr_key_1: keyword_attr_val_1
+                            }
+                        },
+                        {
+                            "tag": keyword_tag_2,
+                            "attr": {
+                                keyword_attr_key_2: keyword_attr_val_2
+                            }
+                        }
+                    ]
+                }
+                keywords = video_text_from_url(url, settings, soup_path_for_list, soup_path_for_keyword)
+                if len(keywords) > 1 and insert_val:
+                    db.stations.insert(
+                        {
+                            "name": name,
+                            "display_name": display_name,
+                            "url": url,
+                            "settings": settings,
+                            "soup_path_for_list": soup_path_for_list,
+                            "soup_path_for_keyword": soup_path_for_keyword,
+                            "meta": {
+                                "country": country,
+                                "language": language
+                            }
+                        }
+                    )
+                return render_template("insert.html", form=form, keywords=keywords, seo=seo)
+            else:
+                error = "duplicate url or name"
+                return render_template("insert.html", form=form, error=error, seo=seo)
+            #get keywords using above data
+        else:
+            return render_template("insert.html", form=form, seo=seo)
+    else:
+        return render_template("insert.html", form=form, seo=seo)
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 app.jinja_env.globals['url_for'] = url_for
