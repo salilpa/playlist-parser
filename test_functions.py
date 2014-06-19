@@ -83,9 +83,6 @@ def test_has_next_page():
 def test_find_project():
     browser = webdriver.Firefox()
     sign_in(browser, url, password_field, PASS, email_field, EMAIL, button, wait_box)
-    assert type(find_project(PROJECT_URL, browser, name, class_name, "blah_name")) is int
-    assert find_project(PROJECT_URL, browser, name, "blah_name", "blah_name") is False
-    assert find_project(PROJECT_URL, browser, "random_name", class_name, id_name) is False
     assert type(find_project(PROJECT_URL, browser, name, class_name, id_name)) is int
     assert type(find_project(PROJECT_URL, browser, "jsTesting", class_name, id_name)) is int
     browser.quit()
