@@ -5,6 +5,7 @@ from apiclient.discovery import build
 from settings import DEVELOPER_KEY
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 import selenium.webdriver.support.ui as ui
 
@@ -87,7 +88,7 @@ def sign_in(browser, url, password_field, password, email_field, email, button, 
         email_box.send_keys(email)
         password_box = browser.find_element_by_id(password_field)
         password_box.send_keys(password)
-        button = browser.find_element_by_id(button)
+        button = browser.find_elements_by_name(button)[0]
         button.click()
     except NoSuchElementException as e:
         return False
