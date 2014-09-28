@@ -88,8 +88,12 @@ def sign_in(browser, url, password_field, password, email_field, email, button, 
         email_box.send_keys(email)
         password_box = browser.find_element_by_id(password_field)
         password_box.send_keys(password)
-        button = browser.find_elements_by_name(button)[0]
-        button.click()
+        buttons = browser.find_elements_by_name(button)
+        if buttons:
+            browser_button = buttons[0]
+            browser_button.click()
+        else:
+            return False
     except NoSuchElementException as e:
         return False
 

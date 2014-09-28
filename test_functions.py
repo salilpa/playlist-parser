@@ -56,7 +56,7 @@ def test_get_suggested_keyword():
 def test_get_tag():
     browser = webdriver.Firefox()
     browser.get("https://www.codeship.io/")
-    assert type(get_tag('Sign in', browser, "sign_in_email")) is int
+    assert type(get_tag('Sign up for Free', browser, "btn")) is int
     assert get_tag('Sign in blah', browser, "sign_in_email") is False
     assert get_tag('Sign in', browser, "blah_email") is False
     browser.quit()
